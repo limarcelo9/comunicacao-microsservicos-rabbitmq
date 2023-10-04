@@ -1,0 +1,68 @@
+version: "3"
+services:
+  
+  demo-auth-db:
+    image: postgres:11
+    container_name: demo-auth-db
+    restart: always
+    environment:
+      - POSTGRES_DB=demo-auth-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5433:5432
+
+  demo-product-db:
+    image: postgres:11
+    container_name: demo-product-db
+    restart: always
+    environment:
+      - POSTGRES_DB=demo-product-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5434:5432
+
+  demo-sales-db:
+    image: tutum/mongodb
+    container_name: demo-sales-db
+    restart: always
+    environment:
+      - MONGODB_DATABASE=demo-sales-db
+      - MONGODB_USER=admin
+      - MONGODB_PASS=123456
+    ports:
+      - 27017:27017
+      - 28017:27017
+
+  auth-api:
+    build: './auth-api'
+    container_name: auth-api
+    environment:
+      - PORT=8080
+    ports:
+      - 8080:8080
+
+  product-api:
+    build: './product-api'
+    container_name: product-api
+    environment:
+      - PORT=8081
+    ports:
+      - 8081:8081
+    
+  sales-api:
+    build: './sales-api'
+    container_name: sales-api
+    environment:
+      - PORT=8082
+    ports:
+      - 8082:8082
+  
+  demo-sales-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: demo-sales-rabbitmq
+    ports:
+      - 5672:5672
+      - 25676:25676
+      - 15672:15672
